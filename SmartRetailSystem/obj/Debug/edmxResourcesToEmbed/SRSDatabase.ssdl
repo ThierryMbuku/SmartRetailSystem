@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SRSDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="CustID" />
+    </Key>
+    <Property Name="CustID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="CustName" Type="varchar" MaxLength="50" />
+    <Property Name="CustEmail" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'SRSDatabase.dbo.Feedback' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Feedback">
+          <Property Name="CustID" Type="varchar" MaxLength="10" />
+          <Property Name="ProID" Type="varchar" MaxLength="10" />
+          <Property Name="Comment" Type="varchar" MaxLength="300" />
+          <Property Name="Date" Type="datetime" />
+        </EntityType>-->
+  <EntityType Name="Invoice">
+    <Key>
+      <PropertyRef Name="InvoiceID" />
+    </Key>
+    <Property Name="InvoiceID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="Date" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'SRSDatabase.dbo.InvoiceProduct' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="InvoiceProduct">
+          <Property Name="InvoiceID" Type="varchar" MaxLength="10" />
+          <Property Name="ProID" Type="varchar" MaxLength="10" />
+          <Property Name="Quantity" Type="int" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'SRSDatabase.dbo.MangementAccount' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="MangementAccount">
+    <Key>
+      <PropertyRef Name="AccName" />
+      <PropertyRef Name="AccPass" />
+    </Key>
+    <Property Name="AccName" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="AccPass" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="Status" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProID" />
+    </Key>
+    <Property Name="ProID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="ProName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ProDescription" Type="varchar" MaxLength="500" />
+    <Property Name="ProPrice" Type="money" />
+    <Property Name="Stock" Type="int" />
+  </EntityType>
+  <EntityType Name="Shops">
+    <Key>
+      <PropertyRef Name="ShopID" />
+    </Key>
+    <Property Name="ShopID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="ShopName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ProID" Type="varchar" MaxLength="10" />
+    <Property Name="ShopDescription" Type="varchar" MaxLength="500" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+error 6004: The table 'SRSDatabase.dbo.Feedback' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__Feedback__CustID__20C1E124" />-->
+  <!--Errors Found During Generation:
+error 6004: The table 'SRSDatabase.dbo.Feedback' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__Feedback__ProID__21B6055D" />-->
+  <Association Name="FK__Invoice__CustID__1A14E395">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+    <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="CustID" />
+      </Principal>
+      <Dependent Role="Invoice">
+        <PropertyRef Name="CustID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <!--Errors Found During Generation:
+error 6004: The table 'SRSDatabase.dbo.InvoiceProduct' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__InvoicePr__Invoi__1BFD2C07" />-->
+  <!--Errors Found During Generation:
+error 6004: The table 'SRSDatabase.dbo.InvoiceProduct' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__InvoicePr__ProID__1CF15040" />-->
+  <Association Name="FK__Shops__ProID__145C0A3F">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="Shops" Type="Self.Shops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="ProID" />
+      </Principal>
+      <Dependent Role="Shops">
+        <PropertyRef Name="ProID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SRSDatabaseModelStoreContainer">
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MangementAccount" EntityType="Self.MangementAccount" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [MangementAccount].[AccName] AS [AccName], 
+    [MangementAccount].[AccPass] AS [AccPass], 
+    [MangementAccount].[Status] AS [Status]
+    FROM [dbo].[MangementAccount] AS [MangementAccount]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__Invoice__CustID__1A14E395" Association="Self.FK__Invoice__CustID__1A14E395">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="Invoice" EntitySet="Invoice" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Shops__ProID__145C0A3F" Association="Self.FK__Shops__ProID__145C0A3F">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Shops" EntitySet="Shops" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

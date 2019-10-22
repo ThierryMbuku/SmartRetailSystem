@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "ItemsView";
+}
+@model List<SmartRetailSystem.Product>
+
+<h2>ItemsView</h2>
+
+<div class="container" style="width:60%;margin-top:2%">
+    @foreach (var items in Model)
+    {
+        <ul class="list-group">
+            <li class="list-group-item active"> Shop Product</li>
+            <li class="list-group-item"> Id : <b> @items.ProID</b></li>
+            <li class="list-group-item"> Name : <b> @items.ProName</b></li>
+            <li class="list-group-item"> Description : <b> @items.ProPrice</b></li>
+            <li class="list-group-item"> Description : <b> @items.Stock</b></li>
+            <li class="list-group-item"> Description : <b> @items.ProPrice</b></li>
+
+        </ul>
+    }
+</div>
